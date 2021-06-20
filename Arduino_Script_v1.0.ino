@@ -33,7 +33,7 @@ const int   THROTTLE_MIN_PCT = 0;     // What percentage of throttle is no throt
 const int   BRAKE_LIMIT      = 35;    // Limit for disabling throttle when pressing brake pedal
 const int   THROTTLE_PIN     = 10;    // Pin of programming board (9=D9 or 10=D10)
 const int   SERIAL_PIN       = 2;     // Pin of serial input (2=D2)
-const int   DEBUG_MODE       = EVENT;  // Debug mode
+const int   DEBUG_MODE       = NONE;  // Debug mode
 //
 // ==========================================================================
 // ============================= DISCLAIMER =================================
