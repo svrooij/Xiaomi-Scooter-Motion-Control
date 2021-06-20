@@ -28,11 +28,12 @@
 const int   DURATION         = 5000;  // Throttle duration (in millisec)
 const float SENSITIVITY      = 2;     // Sensitivity for detecting new kicks (in average km/h difference)
 const int   READINGS_COUNT   = 10;    // Amount of speed readings
-const int   THROTTLE_MAX     = 20;    // What speed to give max throttle (in km/h)
+const int   THROTTLE_MAX_KMH = 20;    // What speed to give max throttle (in km/h)
+const int   THROTTLE_MIN_PCT = 0;     // What percentage of throttle is no throttle (can be used to disable KERS for Essential)
 const int   BRAKE_LIMIT      = 35;    // Limit for disabling throttle when pressing brake pedal
 const int   THROTTLE_PIN     = 10;    // Pin of programming board (9=D9 or 10=D10)
 const int   SERIAL_PIN       = 2;     // Pin of serial input (2=D2)
-const int   DEBUG_MODE       = NONE; // Debug mode
+const int   DEBUG_MODE       = EVENT;  // Debug mode
 //
 // ==========================================================================
 // ============================= DISCLAIMER =================================
@@ -53,11 +54,11 @@ const int   DEBUG_MODE       = NONE; // Debug mode
 SoftwareSerial SoftSerial(SERIAL_PIN, 3); // RX, TX
 
 // Variables
-unsigned long boostTime = 0;                 // time of last boost
-unsigned long brakeTime = 0;                 // time of last boost
+unsigned long boostTime = 0;              // time of last boost
+unsigned long brakeTime = 0;              // time of last boost
 bool isBraking = true;                    // brake activated
 int speedCurrent = 0;                     // current speed
-float speedAverage = 0;                     // the average speed over last X readings
+float speedAverage = 0;                   // the average speed over last X readings
 float speedLastAverage = 0;               // the average speed over last X readings in the last loop
 int speedReadings[READINGS_COUNT] = {0};  // the readings from the speedometer
 int index = 0;                            // the index of the current reading
@@ -149,7 +150,7 @@ void motion_control() {
             debug((String)"BOOST: Kick detected (+"+(speedAverage-speedLastAverage)+" km/h > "+(SENSITIVITY/(float)READINGS_COUNT)+")",EVENT);
         }
         if (state == BOOST){ // In boost mode, activate throttle depending on average speed and duration
-            int power = (speedCurrent>THROTTLE_MAX?THROTTLE_MAX:speedCurrent)*(100/THROTTLE_MAX);
+            int power = (speedCurrent>THROTTLE_MAX_KMH?THROTTLE_MAX_KMH:speedCurrent)*(100/THROTTLE_MAX_KMH);
             float elapsedTime = (millis()-boostTime) / (float)1000;
             float percentageThrottle = power-power*pow(power,elapsedTime-DURATION/(float)1000); // Quadratic formula
             if(percentageThrottle>10){ 
@@ -166,5 +167,5 @@ void motion_control() {
 }
 
 int setThrottle(int percentageThrottle) {
-    analogWrite(THROTTLE_PIN, percentageThrottle*1.88+45); // Percentage in whole numbers: 0-100, results in a value of 45-233
+    analogWrite(THROTTLE_PIN, 45+THROTTLE_MIN_PCT*1.88+percentageThrottle*(100-THROTTLE_MIN_PCT)/100*1.88); // Percentage in whole numbers: 0-100, results in a value of 45-233
 }
