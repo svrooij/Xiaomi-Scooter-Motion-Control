@@ -20,13 +20,14 @@ An Arduino Nano will be used to read out the serial-bus of the Scooter. The spee
 We reccomend to purchase the following part at [the closest __local__ electronics store](https://www.google.com/maps/search/elektronica+arduino/).
 
 ### Shopping list
-* Arduino Nano (without headers)
-* 1k resistor (use an metal film type)
-* 0.47uF capacitor (use an elco)
+* Arduino Nano (without headers is recommended)
+* 1k resistor (metal film type is recommended)
+* 0.47uF capacitor (electrolytic type is recommended)
 * JST-ZH male-plug (or cut it from the trottle)
-* 10cm male-female prototyping cable (various colors)
-* USB A to Mini USB cable for programming and debugging
+* 10cm male-female prototyping cable (black, red, green and yellow)
+* USB A to Mini USB cable
 * Optional: [A sticker for the rear bumper](https://www.legaalsteppen.nl/)
+* Reccomended: various sizes of heat shrink sleeves and hot melt glue
 
 ### Wiring it up
 ![Wiring Scheme](Arduino_Wiring_Scheme_v1.0.png?raw=true "Wiring Scheme")
