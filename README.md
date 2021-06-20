@@ -29,6 +29,7 @@ We reccomend to purchase the following part at [the closest __local__ electronic
 * Optional: [A sticker for the rear bumper](https://www.legaalsteppen.nl/)
 
 ### Wiring it up
+![Wiring Scheme](Arduino_Wiring_Scheme_v1.0.png?raw=true "Wiring Scheme")
 
 ## Software
 ### Upload script to Arduino
