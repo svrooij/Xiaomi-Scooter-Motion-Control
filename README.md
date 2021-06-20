@@ -54,7 +54,7 @@ This modification is created for electric scooters in The Netherlands to comply 
 
 The Dutch Ministry of Infrastructure and Water Management has confirmed that a two-wheel vehicle, which is intended to be muscle-powered and clearly belongs on the bicycle path, should be seen as a pedal cycle. By the nature of the assistance these electic scooters are categorized as 'pedal cycles with with pedal assistance' and do not need type-approval. These vehicles are allowed to drive up to 25 km/h on public roads.
 
-The code below is intended to comply with above regulations and should be used in combination with modified firmware for the electric scooter. This firmware must contain at least the following adaptations:
+The script is intended to comply with above regulations and should be used in combination with modified firmware for the electric scooter. This firmware must contain at least the following adaptations:
 * Electric power reduced to 250 W (18A)
 * Maximum speed 25 km/h
 * No flashing tail light (to comply with NL RVV 1990 article 35a)
