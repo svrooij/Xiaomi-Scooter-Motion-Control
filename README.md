@@ -30,12 +30,14 @@ We reccomend to purchase the following part at [the closest __local__ electronic
 
 ### Wiring it up
 
-##Software
-### Upload script
+## Software
+### Upload script to Arduino
 Using the latest Arduino IDE, upload the .ino file to your programming board. Remove the stock throttle and place the Arduino Nano under the original dashboard.
-
-
-Flash the stock firmware on your dashboard using Bluetooth to custom firmware with the adaptations below. 
+### Flash custom firmware to Dashboard
+Using one of the following apps, flash your dashboard to custom firmware that meets the local regulations:
+* Android (paid): [Xiaoflasher](https://play.google.com/store/apps/details?id=eScooter.m365Info)
+* Android (free): [ScooterHacking Utility](https://play.google.com/store/apps/details?id=sh.cfw.utility)
+* iOS (free, create firmware manually): [Scooter Companion](https://testflight.apple.com/join/RaFiBTgi) 
 
 Reccommended params:
 * Max speed: 25/20/15 (S/D/ECO, for LEGAL purposes)
@@ -43,6 +45,8 @@ Reccommended params:
 * Brake light flash freqency: 0 (for LEGAL purposes)
 * No KERS (also called COAST MODE+ANTI CLONK, to disable braking at 0% throttle)
 * No overspeed alarm (theoretically possible at steep slopes)
+
+## Done!
 
 # Legal aspects
 This modification is created for electric scooters in The Netherlands to comply with REGULATION (EU) No 168/2013 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL on the approval and market surveillance of two- or three-wheel vehicles and quadricycles. In this regulation 'pedal cycles with with pedal assistance which are equipped with an auxiliary electric motor having a maximum continuous rated power of less than or equal to 250 W, where the output of the motor is cut off when the cyclist stops pedalling and is otherwise progressively reduced and finally cut off before the vehicle speed reaches 25 km/h' are excepted from type approval and the associated laws.
