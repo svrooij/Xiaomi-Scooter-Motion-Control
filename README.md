@@ -15,6 +15,14 @@ TO THE FULL EXTEND PERMISSABLE BY LAW, THE DEVELOPER DISCLAIMS ALL WARRANTIES, E
 # How it works
 An Arduino Nano will be used to read out the serial-bus of the Scooter. The speedometer will be monitored if there are any kicks with your feed. When there is a kick, the throttle will be opened for 5 seconds (quadracically decreasing). After this time, the scooter will be accepting a new kick.
 
+## Formula
+The (simplified) formula used for calculating the throttle level (in full percentages of throttle) is: y=s-s*s^(x-t). Where x=time elapsed,t=duration of boost, s=speed).
+
+This results in the following graph at 5km/h:
+![Graph 5km/h](Graph_Throttle_5kmh.png?raw=true "Graph 5km/h")
+And at 20km/h:
+![Graph 20km/h](Graph_Throttle_20kmh.png?raw=true "Graph 20km/h")
+
 # Modifications
 ## Hardware
 We reccomend to purchase the following part at [the closest __local__ electronics store](https://www.google.com/maps/search/elektronica+arduino/).
@@ -27,7 +35,7 @@ We reccomend to purchase the following part at [the closest __local__ electronic
 * 10cm male-female prototyping cable (black, red, green and yellow)
 * USB A to Mini USB cable
 * Optional: [A sticker for the rear bumper](https://www.legaalsteppen.nl/)
-* Reccomended: various sizes of heat shrink sleeves and hot melt glue
+* Recommended: various sizes of heat shrink sleeves and hot melt glue
 
 ### Wiring it up
 ![Wiring Scheme](Arduino_Wiring_Scheme_v1.0.png?raw=true "Wiring Scheme")
