@@ -36,7 +36,7 @@ We reccomend to purchase the following part at [the closest __local__ electronic
 * Arduino Nano (without headers is recommended)
 * 1k resistor (metal film type is recommended)
 * 0.47uF capacitor (electrolytic type is recommended)
-* JST-ZH male-plug (or cut it from the trottle)
+* JST-ZH 1.5mm male plug (or cut it from the trottle)
 * 10cm male-female prototyping cable (black, red, green and yellow)
 * USB A to Mini USB cable
 * Optional: [A sticker for the rear bumper](https://www.legaalsteppen.nl/)
