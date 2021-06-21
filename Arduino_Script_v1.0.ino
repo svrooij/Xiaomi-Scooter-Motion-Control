@@ -29,7 +29,7 @@ const int   DURATION         = 5000;  // Throttle duration (in millisec)
 const float SENSITIVITY      = 2;     // Sensitivity for detecting new kicks (in average km/h difference)
 const int   READINGS_COUNT   = 10;    // Amount of speed readings
 const int   THROTTLE_MAX_KMH = 20;    // What speed to give max throttle (in km/h)
-const int   THROTTLE_MIN_PCT = 0;     // What percentage of throttle is no throttle (can be used to disable KERS for Essential)
+const int   THROTTLE_MIN_PCT = 0;     // What percentage of throttle is no throttle (10 to disable KERS on stock firmware)
 const int   BRAKE_LIMIT      = 35;    // Limit for disabling throttle when pressing brake pedal
 const int   THROTTLE_PIN     = 10;    // Pin of programming board (9=D9 or 10=D10)
 const int   SERIAL_PIN       = 2;     // Pin of serial input (2=D2)
