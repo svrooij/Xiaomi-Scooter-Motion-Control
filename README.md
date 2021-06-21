@@ -1,4 +1,4 @@
-# Xiaomi-Scooter-Motion-Control
+#  Electric scooter motion control adaptation
 A small hardware and software modification to legalise the electric scooters in The Netherlands.
 
 # Models
@@ -68,9 +68,8 @@ Reccommended params:
 # Legal aspects
 This modification is created for electric scooters in The Netherlands to comply with REGULATION (EU) No 168/2013 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL on the approval and market surveillance of two- or three-wheel vehicles and quadricycles. In this regulation 'pedal cycles with with pedal assistance which are equipped with an auxiliary electric motor having a maximum continuous rated power of less than or equal to 250 W, where the output of the motor is cut off when the cyclist stops pedalling and is otherwise progressively reduced and finally cut off before the vehicle speed reaches 25 km/h' are excepted from type approval and the associated laws.
 
-The Dutch Ministry of Infrastructure and Water Management has confirmed that a two-wheel vehicle, which is intended to be muscle-powered and clearly belongs on the bicycle path, should be seen as a pedal cycle. By the nature of the assistance these electic scooters are categorized as 'pedal cycles with with pedal assistance' and do not need type-approval. These vehicles are allowed to drive up to 25 km/h on public roads.
-
-The script is intended to comply with above regulations and should be used in combination with modified firmware for the electric scooter. This firmware must contain at least the following adaptations:
+The script is intended to comply with above regulations and should be used in combination with modified software and hardware for the electric scooter. A road legal scooter must contain at least the following adaptations:
+* No throttle lever (remove it)
 * Electric power reduced to 250 W (18A)
 * Maximum speed 25 km/h
 * No flashing tail light (to comply with NL RVV 1990 article 35a)
