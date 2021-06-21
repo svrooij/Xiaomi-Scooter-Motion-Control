@@ -43,7 +43,7 @@ We reccomend to purchase the following part at [the closest __local__ electronic
 ### Wiring it up
 ![Wiring Scheme](Arduino_Wiring_Scheme_v1.0.png?raw=true "Wiring Scheme")
 
-Finish up wrapping the board in heatsink and cover all remaining open connections in hot melt glue. Then mount the board tightly in the steering frame to prevent it from rattling. 
+Finish up wrapping the board in heat shrink tube and cover all remaining open connections in hot melt glue. Then mount the board tightly in the steering frame to prevent it from rattling. 
 
 ## Software
 ### Upload script to Arduino
