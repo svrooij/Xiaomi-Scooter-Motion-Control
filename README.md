@@ -65,6 +65,10 @@ Reccommended params:
 
 ## Done!
 
+## Support
+We have a Telegram group for legal electric scooter enthousiasts, join us on:
+https://t.me/joinchat/IuIjHecjckhK1h-a
+
 # Legal aspects
 This modification is created for electric scooters in The Netherlands to comply with REGULATION (EU) No 168/2013 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL on the approval and market surveillance of two- or three-wheel vehicles and quadricycles. In this regulation 'pedal cycles with with pedal assistance which are equipped with an auxiliary electric motor having a maximum continuous rated power of less than or equal to 250 W, where the output of the motor is cut off when the cyclist stops pedalling and is otherwise progressively reduced and finally cut off before the vehicle speed reaches 25 km/h' are excepted from type approval and the associated laws.
 
