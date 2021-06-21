@@ -75,8 +75,8 @@ The script is intended to comply with above regulations and should be used in co
 * No flashing tail light (to comply with NL RVV 1990 article 35a)
 
 Sources:
-* Regulation (EU) No 168/2013 of the European Parliament and of the Council of 15 January 2013 on the approval and market surveillance of two- or three-wheel vehicles and quadricycles Text with EEA relevance
-* Artikel 35a Reglement verkeersregels en verkeerstekens 1990 (RVV 1990)
+* [Regulation (EU) No 168/2013 of the European Parliament and of the Council of 15 January 2013 on the approval and market surveillance of two- or three-wheel vehicles and quadricycles Text with EEA relevance](https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32013R0168)
+* [Artikel 35a Reglement verkeersregels en verkeerstekens 1990 (RVV 1990)](https://wetten.overheid.nl/jci1.3:c:BWBR0004825&hoofdstuk=II&paragraaf=13&artikel=35a)
 
 # Confirmation of legality
 "(...) However, we take the view that a two-wheeled vehicle, which is propelled by muscle power and which clearly belongs on the bicycle path, should fall into the category of bicycle. (...) Due to the nature of the support, these scooters therefore also fall into the category of 'bicycle with pedal assistance' and do not have to be admitted separately as special mopeds. You are allowed to drive on public roads at a maximum speed of 25 km/h."
