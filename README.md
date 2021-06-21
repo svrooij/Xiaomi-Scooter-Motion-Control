@@ -21,7 +21,7 @@ The (simplified) formula used for calculating the throttle level (in full percen
 * y = throttle
 * x = time elapsed
 * t = duration of boost
-* s = speed*5 (actual multiplier depends on configuration)
+* s = speed (normally multiplied by 5, but actual value depends on configuration)
 
 This results in the following graph at 20km/h:
 
