@@ -55,8 +55,8 @@ Using one of the following apps, flash your dashboard to custom firmware that me
 * iOS (free, create firmware manually): [Scooter Companion](https://testflight.apple.com/join/RaFiBTgi) 
 
 Reccommended params:
-* Max speed: 25/20/15 (S/D/ECO, max 25 for legal purposes)
-* Draw: 18/16/14 (S/D/ECO, max 18A for legal purposes)
+* Max speed: 25kmh/20kmh/15kmh (S/D/ECO, max 25 km/h for legal purposes)
+* Draw: 18A/16A/14A (S/D/ECO, max 18A for legal purposes)
 * Brake light flash freqency: 0 (max 0 for legal purposes)
 * No KERS (also called COAST MODE+ANTI CLONK, to disable braking at 0% throttle)
 * No overspeed alarm (theoretically possible at steep slopes)
