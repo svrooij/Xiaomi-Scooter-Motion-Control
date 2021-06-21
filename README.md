@@ -1,7 +1,7 @@
 # Xiaomi-Scooter-Motion-Control
 A small hardware and software modification to legalise the electric scooters in The Netherlands.
 
-# Supported scooter models
+# Models
 - Xiaomi Mi Essential (not tested)
 - Xiaomi Mi 1S EU (not tested)
 - Xiaomi Mi M365 Pro (not tested)
