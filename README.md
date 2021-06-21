@@ -17,7 +17,7 @@ An Arduino Nano will be used to read out the serial-bus of the Scooter. The spee
 
 ## Formula
 The (simplified) formula used for calculating the throttle level (in full percentages of throttle) is: 
-### y=s-s*s^(x-t)
+### [y=s-s*s^(x-t)](https://www.desmos.com/calculator/w9prsou9va)
 * x = time elapsed
 * t = duration of boost
 * s = speed*5 (actual multiplier depends on configuration)
