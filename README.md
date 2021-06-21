@@ -73,7 +73,7 @@ https://t.me/joinchat/IuIjHecjckhK1h-a
 This modification is created for electric scooters in The Netherlands to comply with REGULATION (EU) No 168/2013 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL on the approval and market surveillance of two- or three-wheel vehicles and quadricycles. In this regulation 'pedal cycles with with pedal assistance which are equipped with an auxiliary electric motor having a maximum continuous rated power of less than or equal to 250 W, where the output of the motor is cut off when the cyclist stops pedalling and is otherwise progressively reduced and finally cut off before the vehicle speed reaches 25 km/h' are excepted from type approval and the associated laws.
 
 The script is intended to comply with above regulations and should be used in combination with modified software and hardware for the electric scooter. A road legal scooter must contain at least the following adaptations:
-* No throttle lever (remove it)
+* No throttle lever
 * Electric power reduced to 250 W (18A)
 * Maximum speed 25 km/h
 * No flashing tail light (to comply with NL RVV 1990 article 35a)
