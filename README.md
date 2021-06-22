@@ -39,13 +39,32 @@ We reccomend to purchase the following part at [the closest __local__ electronic
 * JST-ZH 1.5mm male plug (or cut it from the trottle)
 * 10cm male-female prototyping cable (black, red, green and yellow)
 * USB A to Mini USB cable
+* A small cable-tie
 * Optional: [A sticker for the rear bumper](https://www.legaalsteppen.nl/)
 * Recommended: various sizes of heat shrink sleeves and hot melt glue
 
-### Wiring it up
-![Wiring Scheme](Arduino_Wiring_Scheme_v1.0.png?raw=true "Wiring Scheme")
+### Tools needed
+* Small phillips screw driver
+* Medium phillips screw driver
+* 3mm Allen wrench
+* Wire cutter
 
-Finish up wrapping the board in heat shrink tube and cover all remaining open connections in hot melt glue. Then mount the board tightly in the steering frame to prevent it from rattling. 
+### Disassembly ([photo's can be found here](https://www.scootersdirect.co.uk/blogs/news/xiaomi-m365-pro-scooter-teardown-inside))
+ENSURE THE SCOOTER IS POWERED OFF, DO NOT POWER IT ON UNLESS REFITTED
+1. Remove the righthand handlebar grip by sliding it of the steeringbar.
+2. Remove the top dash cover by prying it up, it is hold together by double sided adhesive.
+3. Remove the lower/main dashboard cover by prying it up, it is hold together by double sided adhesive.
+4. Remove the screw on top and below the headlight and slide the headlight out of its socket.
+5. Remove the dashboard from the steering column by unscrewing the three small screws holding it in place.  
+6. Cut the cable-tie from the rubber thimble, unplug the three small connectors inside and unplug the main dashboard connector. 
+7. Remove the throttle by removing the rubber protector, loosening the allen srew, feeding the cable trough the headlight socked and sliding the throttle off.
+
+### Wiring
+![Wiring Scheme](Arduino_Wiring_Scheme_v1.0.png?raw=true "Wiring Scheme")
+Finish up wrapping the board in heat shrink tube and cover all remaining open connections in hot melt glue. 
+
+### Reassembly
+Follow steps 1-6 of the disassembly in reverse order. Make sure you mount the board tightly in the steering frame to prevent it from rattling. 
 
 ## Software
 ### Upload script to Arduino
