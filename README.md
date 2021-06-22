@@ -61,6 +61,7 @@ ENSURE THE SCOOTER IS POWERED OFF, DO NOT POWER IT ON UNLESS REFITTED
 
 ### Wiring
 ![Wiring Scheme](Arduino_Wiring_Scheme_v1.0.png?raw=true "Wiring Scheme")
+
 Finish up wrapping the board in heat shrink tube and cover all remaining open connections in hot melt glue. 
 
 ### Reassembly
@@ -68,7 +69,8 @@ Follow steps 1-6 of the disassembly in reverse order. Make sure you mount the bo
 
 ## Software
 ### Upload script to Arduino
-Using the latest Arduino IDE, upload the .ino file to your programming board. Remove the stock throttle and place the Arduino Nano under the original dashboard.
+Using the latest Arduino IDE, upload the .ino file to your programming board. 
+
 ### Flash custom firmware to Dashboard
 Using one of the following apps, flash your dashboard to custom firmware that meets the local regulations:
 * Android (paid): [Xiaoflasher](https://play.google.com/store/apps/details?id=eScooter.m365Info)
