@@ -65,7 +65,7 @@ ENSURE THE SCOOTER IS POWERED OFF, DO NOT POWER IT ON UNLESS REFITTED
 Finish up wrapping the board in heat shrink tube and cover all remaining open connections in hot melt glue. 
 
 ### Reassembly
-Follow steps 1-6 of the disassembly in reverse order. Make sure you mount the board tightly in the steering frame to prevent it from rattling. 
+Follow steps 1-6 of the disassembly in reverse order. Make sure you mount the board tightly in the steering frame to prevent it from rattling. Program the board and flash your scooter using the steps below.
 
 ## Software
 ### Upload script to Arduino
