@@ -17,10 +17,10 @@
   #define MILEAGEVALUE 0x64
 #define MOTOR2DASHB 0x21
   #define SPEEDVALUE   0x64
-#define DASHB2BATTR 0x22
-#define BATTR2DASHB 0x23
-#define MOTOR2BATTR 0x24
-#define BATTR2MOTOR 0x25
+//#define DASHB2BATTR 0x22
+//#define BATTR2DASHB 0x23
+//#define MOTOR2BATTR 0x24
+//#define BATTR2MOTOR 0x25
 
 // ==========================================================================
 // =============================== CONFIG ===================================
@@ -28,7 +28,7 @@
 //
 const int   DURATION_MIN       = 1000;  // Throttle duration at min throttle (in millisec)
 const int   DURATION_MAX       = 4000;  // Throttle duration at max throttle (in millisec)
-const float SENSITIVITY        = 0.2;   // Sensitivity for detecting new kicks (in average km/h difference)
+const float SENSITIVITY        = 1.5;   // Sensitivity for detecting new kicks (in average km/h difference)
 const int   READINGS_COUNT     = 10;    // Amount of speed readings (more readings will make kick detection slower but more accurate)
 const int   THROTTLE_BOOST     = 1;     // Increase throttle during boost (improves acceleration)
 const int   THROTTLE_MIN_KMH   = 5;     // What speed to start throttling
@@ -38,7 +38,7 @@ const int   THROTTLE_MAX_PCT   = 100;   // Limit throttle maximum to reduce powe
 const int   BRAKE_LIMIT        = 48;    // Limit for disabling throttle when pressing brake pedal (we recommend setting this as low as possible)
 const int   THROTTLE_PIN       = 10;    // Pin of programming board (9=D9 or 10=D10)
 const int   SERIAL_PIN         = 2;     // Pin of serial input (2=D2)
-const int   DEBUG_MODE         = EVENT;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
+const int   DEBUG_MODE         = NONE;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
 const int   DURATION_DIFF      = DURATION_MAX-DURATION_MIN;
 const int   THROTTLE_DIFF_KMH  = THROTTLE_MAX_KMH-THROTTLE_MIN_KMH;
 const int   THROTTLE_DIFF_PCT  = THROTTLE_MAX_PCT-THROTTLE_MIN_PCT;
@@ -144,7 +144,7 @@ void loop() {
 }
 
 float getThrottle(float pwr,float tme){
-    return pwr-pwr*pow(pwr,tme);
+    return pwr-pwr*pow(pwr,0.5*tme);
 }
 
 int getDuration(int spd){ // in ms
@@ -173,14 +173,12 @@ void motion_control() {
         state = READY;
     } else {
         // Check if new boost needed
-        if (state != BOOST && (speedAverage-speedLastAverage) > SENSITIVITY && (millis()-stopTime)>speedReadingsInt/0.5) { // If not boosting, kick detected and no false-positive reading
+        if (state != BOOST && (speedAverage-speedLastAverage) > (SENSITIVITY/READINGS_COUNT) && (millis()-stopTime)>(int)(speedReadingsInt*0.5)) { // If not boosting, kick detected and no false-positive reading
             state = BOOST;
             startTime = millis();
             speedBoost = speedCurrent;
             debug((String)"BOOST: "+startTime,EVENT);
-            debug((String)"BOOST: Kick detected (+"+(speedAverage-speedLastAverage)+" km/h > "+SENSITIVITY+")",EVENT);
-            debug((String)"BOOST: Last stop: "+(millis()-stopTime)+" ms ago > "+(speedReadingsInt/0.5)+"",EVENT);
-        }
+        } 
         // Check for existing boost
         if (state == BOOST){
             // Calculate duration and throttle
@@ -190,10 +188,10 @@ void motion_control() {
             float timeToGo = (timeElapsed-timeDuration)/(float)1000;
             float throttlePercentage = getThrottle(power,timeToGo);
             debug((String)"THROTTLE: "+throttlePercentage+"% ("+power+" @ "+-timeToGo+"s)",EVENT);
+            if((speedAverage-speedLastAverage)>0)stopTime = millis();
             if(throttlePercentage>10){ 
                 setThrottle(throttlePercentage);
             } else { // End of boost
-                stopTime = millis()-200;
                 debug((String)"READY: "+stopTime,EVENT);
                 state = READY;
             }
