@@ -28,7 +28,7 @@
 //
 const int   DURATION_MIN       = 1000;  // Throttle duration at min throttle (in millisec)
 const int   DURATION_MAX       = 4000;  // Throttle duration at max throttle (in millisec)
-const float SENSITIVITY        = 0.25;   // Sensitivity for detecting new kicks (in average km/h difference)
+const float SENSITIVITY        = 0.2;   // Sensitivity for detecting new kicks (in average km/h difference)
 const int   READINGS_COUNT     = 10;    // Amount of speed readings (more readings will make kick detection slower but more accurate)
 const int   THROTTLE_BOOST     = 1;     // Increase throttle during boost (improves acceleration)
 const int   THROTTLE_MIN_KMH   = 5;     // What speed to start throttling
