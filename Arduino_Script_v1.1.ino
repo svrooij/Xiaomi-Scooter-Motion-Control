@@ -28,7 +28,7 @@
 //
 const int   DURATION_MIN       = 1000;  // Throttle duration at min throttle (in millisec)
 const int   DURATION_MAX       = 4000;  // Throttle duration at max throttle (in millisec)
-const float SENSITIVITY        = 0.3;   // Sensitivity for detecting new kicks (in average km/h difference)
+const float SENSITIVITY        = 0.25;   // Sensitivity for detecting new kicks (in average km/h difference)
 const int   READINGS_COUNT     = 10;    // Amount of speed readings (more readings will make kick detection slower but more accurate)
 const int   THROTTLE_BOOST     = 1;     // Increase throttle during boost (improves acceleration)
 const int   THROTTLE_MIN_KMH   = 5;     // What speed to start throttling
@@ -38,7 +38,7 @@ const int   THROTTLE_MAX_PCT   = 100;   // Limit throttle maximum to reduce powe
 const int   BRAKE_LIMIT        = 48;    // Limit for disabling throttle when pressing brake pedal (we recommend setting this as low as possible)
 const int   THROTTLE_PIN       = 10;    // Pin of programming board (9=D9 or 10=D10)
 const int   SERIAL_PIN         = 2;     // Pin of serial input (2=D2)
-const int   DEBUG_MODE         = NONE;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
+const int   DEBUG_MODE         = EVENT;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
 const int   DURATION_DIFF      = DURATION_MAX-DURATION_MIN;
 const int   THROTTLE_DIFF_KMH  = THROTTLE_MAX_KMH-THROTTLE_MIN_KMH;
 const int   THROTTLE_DIFF_PCT  = THROTTLE_MAX_PCT-THROTTLE_MIN_PCT;
@@ -143,8 +143,8 @@ void loop() {
     motion_control();
 }
 
-float getThrottle(int pwr,int tme){
-    return pwr-pwr*pow(pwr,tme/1000);
+float getThrottle(float pwr,float tme){
+    return pwr-pwr*pow(pwr,tme);
 }
 
 int getDuration(int spd){ // in ms
@@ -153,7 +153,7 @@ int getDuration(int spd){ // in ms
     return DURATION_MIN+(spd-THROTTLE_MIN_KMH)/(float)THROTTLE_DIFF_KMH*DURATION_DIFF;
 }
 
-int getPower(int spd){ // in full pct
+float getPower(int spd){ // in full pct
     if(spd<=THROTTLE_MIN_KMH) return THROTTLE_MIN_PCT;
     if(spd>=THROTTLE_MAX_KMH) return THROTTLE_MAX_PCT;
     return THROTTLE_MIN_PCT+(spd-THROTTLE_MIN_KMH)/(float)THROTTLE_DIFF_KMH*THROTTLE_DIFF_PCT;
@@ -177,22 +177,23 @@ void motion_control() {
             state = BOOST;
             startTime = millis();
             speedBoost = speedCurrent;
+            debug((String)"BOOST: "+startTime,EVENT);
             debug((String)"BOOST: Kick detected (+"+(speedAverage-speedLastAverage)+" km/h > "+SENSITIVITY+")",EVENT);
             debug((String)"BOOST: Last stop: "+(millis()-stopTime)+" ms ago > "+(speedReadingsInt/0.5)+"",EVENT);
         }
         // Check for existing boost
         if (state == BOOST){
             // Calculate duration and throttle
-            int power = getPower(THROTTLE_BOOST==1?speedCurrent:speedBoost);
+            float power = getPower(THROTTLE_BOOST==1?speedCurrent:speedBoost);
             int timeElapsed = (millis()-startTime);
             int timeDuration = getDuration(speedBoost);
-            int timeToGo = timeElapsed-timeDuration;
+            float timeToGo = (timeElapsed-timeDuration)/(float)1000;
             float throttlePercentage = getThrottle(power,timeToGo);
-            debug((String)"THROTTLE: "+throttlePercentage+"% ("+power+" @ "+timeToGo+"s)",EVENT);
+            debug((String)"THROTTLE: "+throttlePercentage+"% ("+power+" @ "+-timeToGo+"s)",EVENT);
             if(throttlePercentage>10){ 
                 setThrottle(throttlePercentage);
             } else { // End of boost
-                stopTime = millis();
+                stopTime = millis()-200;
                 debug((String)"READY: "+stopTime,EVENT);
                 state = READY;
             }
