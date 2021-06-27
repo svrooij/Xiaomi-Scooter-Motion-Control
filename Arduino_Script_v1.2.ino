@@ -39,7 +39,7 @@ const int   THROTTLE_MAX_PCT   = 100;   // Throttle maximum to set power at or b
 const int   BRAKE_LIMIT        = 48;    // Limit for disabling throttle when pressing brake pedal (we recommend setting this as low as possible)
 const int   THROTTLE_PIN       = 10;    // Pin of programming board (9=D9 or 10=D10)
 const int   SERIAL_PIN         = 2;     // Pin of serial input (2=D2)
-const int   DEBUG_MODE         = EVENT;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
+const int   DEBUG_MODE         = NONE;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
 const int   DURATION_DIFF      = DURATION_MAX-DURATION_MIN;
 const int   THROTTLE_DIFF_KMH  = THROTTLE_MAX_KMH-THROTTLE_MIN_KMH;
 const int   THROTTLE_DIFF_PCT  = THROTTLE_MAX_PCT-THROTTLE_MIN_PCT;
