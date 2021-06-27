@@ -28,17 +28,18 @@
 //
 const int   DURATION_MIN       = 1000;  // Throttle duration at min throttle (in millisec)
 const int   DURATION_MAX       = 4000;  // Throttle duration at max throttle (in millisec)
-const float SENSITIVITY        = 1.5;   // Sensitivity for detecting new kicks (in average km/h difference)
+const float SENSITIVITY        = 1.5;   // Sensitivity for detecting new kicks (in km/h difference)
 const int   READINGS_COUNT     = 10;    // Amount of speed readings (more readings will make kick detection slower but more accurate)
 const int   THROTTLE_BOOST     = 1;     // Increase throttle during boost (improves acceleration)
 const int   THROTTLE_MIN_KMH   = 5;     // What speed to start throttling
 const int   THROTTLE_MAX_KMH   = 20;    // What speed to give max throttle (in km/h, we recommend vMax-5)
-const int   THROTTLE_MIN_PCT   = 0;     // Maximum is 10 to disable KERS above THROTTLE_MIN_KMH on stock firmware
-const int   THROTTLE_MAX_PCT   = 100;   // Limit throttle maximum to reduce power (71 for 350W motor, but we recommend adapting the firmware instead)
+const int   THROTTLE_IDLE_PCT  = 0;     // Maximum is 10 to disable KERS when not braking above THROTTLE_MIN_KMH on stock firmware
+const int   THROTTLE_MIN_PCT   = 33;     // Throttle minimum to set power at or below THROTTLE_MIN_KMH (71 for 350W motor, but we recommend adapting the firmware instead)
+const int   THROTTLE_MAX_PCT   = 100;   // Throttle maximum to set power at or below THROTTLE_MIN_KMH (71 for 350W motor, but we recommend adapting the firmware instead)
 const int   BRAKE_LIMIT        = 48;    // Limit for disabling throttle when pressing brake pedal (we recommend setting this as low as possible)
 const int   THROTTLE_PIN       = 10;    // Pin of programming board (9=D9 or 10=D10)
 const int   SERIAL_PIN         = 2;     // Pin of serial input (2=D2)
-const int   DEBUG_MODE         = NONE;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
+const int   DEBUG_MODE         = EVENT;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
 const int   DURATION_DIFF      = DURATION_MAX-DURATION_MIN;
 const int   THROTTLE_DIFF_KMH  = THROTTLE_MAX_KMH-THROTTLE_MIN_KMH;
 const int   THROTTLE_DIFF_PCT  = THROTTLE_MAX_PCT-THROTTLE_MIN_PCT;
@@ -168,12 +169,13 @@ bool debug(String text,int mode){
 
 void motion_control() {
     if (speedCurrent < THROTTLE_MIN_KMH || isBraking) {
-        stopThrottle();
+        brakeThrottle();
         stopTime = millis();
         state = READY;
     } else {
         // Check if new boost needed
-        if (state != BOOST && (speedAverage-speedLastAverage) > (SENSITIVITY/READINGS_COUNT) && (millis()-stopTime)>(int)(speedReadingsInt*0.5)) { // If not boosting, kick detected and no false-positive reading
+        debug((String)"CHECK: "+(speedAverage-speedLastAverage)+">"+(SENSITIVITY/READINGS_COUNT)+" && "+(millis()-stopTime)+">"+(speedReadingsInt/2),EVENT);
+        if (state != BOOST && (speedAverage-speedLastAverage) > (SENSITIVITY/READINGS_COUNT) && (millis()-stopTime)>(speedReadingsInt/2)) { // If not boosting, kick detected and no false-positive reading
             state = BOOST;
             startTime = millis();
             speedBoost = speedCurrent;
@@ -197,14 +199,18 @@ void motion_control() {
             }
         // No current boost, above 5kmh and not braking
         } else {
-            setThrottle(0); // Default throttle
+            idleThrottle(); // Default throttle
         }
     }
     speedLastAverage = speedAverage;
 }
 
-int stopThrottle(){
+int brakeThrottle(){
     analogWrite(THROTTLE_PIN, 45); // Percentage in whole numbers: 0-100, results in a value of 45-233
+}
+
+int idleThrottle(){
+    analogWrite(THROTTLE_PIN, 45+THROTTLE_IDLE_PCT*1.88); // Percentage in whole numbers: 0-100, results in a value of 45-233
 }
 
 int setThrottle(int percentageThrottle) {
