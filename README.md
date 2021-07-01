@@ -1,12 +1,12 @@
 #  Electric scooter motion control adaptation
-A small hardware and software modification to legalise the electric scooters in The Netherlands.
+A small hardware and software modification to legalise electric scooters with Segway-Ninebot ES/MAX/Xiaomi M365-series scooters in The Netherlands.
 
 # Models
 - Xiaomi Mi Essential (not tested)
 - Xiaomi Mi 1S EU (not tested)
 - Xiaomi Mi M365 Pro (not tested)
-- Xiaomi Mi Pro 2 (tested)
-- Segway-Ninebot Max and ES series (should theoretically work as wiring is nearly identical)
+- Xiaomi Mi (M365) Pro 2 (tested)
+- Segway-Ninebot Max and ES series (should theoretically work as wiring is identical, not tested!!!)
 
 # Known issues
 - Accelerating in corners: The wheel width on the tire wall is a lot smaller than the tire center. Because the speed is measured by the amound of wheel rotations, cornering with your scooter will result in an incorrect increasing speed reading. This is a design flaw of the scooter and cannot be solved in this script.
