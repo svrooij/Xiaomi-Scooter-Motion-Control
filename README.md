@@ -90,7 +90,8 @@ Reccommended params:
 We have a Telegram group for legal electric scooter enthousiasts, join us on:
 https://t.me/joinchat/IuIjHecjckhK1h-a
 
-# Legal aspects
+# Legal aspects in The Netherlands
+## Relevant regulations and required modifications
 This modification is created for electric scooters in The Netherlands to comply with REGULATION (EU) No 168/2013 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL on the approval and market surveillance of two- or three-wheel vehicles and quadricycles. In this regulation 'pedal cycles with with pedal assistance which are equipped with an auxiliary electric motor having a maximum continuous rated power of less than or equal to 250 W, where the output of the motor is cut off when the cyclist stops pedalling and is otherwise progressively reduced and finally cut off before the vehicle speed reaches 25 km/h' are excepted from type approval and the associated laws.
 
 The script is intended to comply with above regulations and should be used in combination with modified software and hardware for the electric scooter. A road legal scooter must contain at least the following adaptations:
@@ -103,7 +104,10 @@ Sources:
 * [Regulation (EU) No 168/2013 of the European Parliament and of the Council of 15 January 2013 on the approval and market surveillance of two- or three-wheel vehicles and quadricycles Text with EEA relevance](https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32013R0168)
 * [Artikel 35a Reglement verkeersregels en verkeerstekens 1990 (RVV 1990)](https://wetten.overheid.nl/jci1.3:c:BWBR0004825&hoofdstuk=II&paragraaf=13&artikel=35a)
 
-# Confirmation of legality (The Netherlands)
+## Insurance and/or liability
+Because this scooter does not need type approval, you do not need a compulsory third party liability insurance for vehicles. You are insured under the conditions of a Public Liability Insurance if damage is caused by your electric scooter. We recommend to get a Public Liability Insurance when using your scooter on puvlic roads. 
+
+## Confirmation of legality
 "(...) However, we take the view that a two-wheeled vehicle, which is propelled by muscle power and which clearly belongs on the bicycle path, should fall into the category of bicycle. (...) Due to the nature of the support, these scooters therefore also fall into the category of 'bicycle with pedal assistance' and do not have to be admitted separately as special mopeds. You are allowed to drive on public roads at a maximum speed of 25 km/h."
 
 THE MINISTER OF INFRASTRUCTURE AND WATER MANAGEMENT,
@@ -113,6 +117,3 @@ On their behalf,
 Head of the Road Safety and Road Transport Department
 
 drs. M.N.E.J.G. Philippens
-
-# Insurance and/or liability (The Netherlands)
-Because this scooter does not need type approval, you do not need a compulsory third party liability insurance for vehicles. You are insured under the conditions of a Public Liability Insurance if damage is caused by your electric scooter. We recommend to get a Public Liability Insurance when using your scooter on puvlic roads. 
