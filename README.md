@@ -6,7 +6,10 @@ A small hardware and software modification to legalise the electric scooters in 
 - Xiaomi Mi 1S EU (not tested)
 - Xiaomi Mi M365 Pro (not tested)
 - Xiaomi Mi Pro 2 (tested)
-- Segway-Ninebot Max and ES series (should theoretically wiring should be nearly identical)
+- Segway-Ninebot Max and ES series (should theoretically work as wiring is nearly identical)
+
+# Known issues
+- Accelerating in corners: The wheel width on the tire wall is a lot smaller than the tire center. Because the speed is measured by the amound of wheel rotations, cornering with your scooter will result in an incorrect increasing speed reading. This is a design flaw of the scooter and cannot be solved in this script.
 
 # Disclaimer
 THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES ARE PROVIDED BY THE DEVELOPER ON AN "AS IS" AND "AS AVAILLABLE" BASIS, UNLESS OTHERWISE SPECIFIED IN WRITING. THE DEVELOPER DOES NOT MAKE ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES. YOU EXPRESSLY AGREE THAT YOUR USE OF THIS SCRIPT IS AT YOUR OWN RISK. 
@@ -14,19 +17,15 @@ THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES ARE PROVIDED BY THE DE
 TO THE FULL EXTEND PERMISSABLE BY LAW, THE DEVELOPER DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED. TO THE FULL EXTEND PERMISSABLE BY LAW, THE DEVELOPER WILL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING FROM THE USE OF THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES, INCLUDING, BUT NOT LIMITED TO DIRECT, INDIRECT, INCIDENTAL, PUNITIVE AND CONSEQUENTIAL DAMAGES, UNLESS OTHERWISE SPECIFIED IN WRITING.
 
 # How it works
-An Arduino Nano will be used to read out the serial-bus of the Scooter. The speedometer will be monitored if there are any kicks with your feed. When there is a kick, the throttle will be opened for 5 seconds (quadracically decreasing). After this time, the scooter will be accepting a new kick.
+An Arduino Nano will be used to read out the serial-bus of the scooter. The speedometer will be monitored if there are any kicks with your feed. When there is a kick, the throttle will be opened for 1-5 seconds (quadracically decreasing in level). The scooter will be accepting a new kick about 300 milliseconds after throttling. The recommended driving style for good kick detection and low power consumption is: kick-boost(5s)-wait(5s)-kick-boost(5s)-wait(5s)-kick-boost(5s)-etcetera. The range of your scooter is not wildly affected by this modification.
 
 ## Formula
 The (simplified) formula used for calculating the throttle level (in full percentages of throttle) is: 
-### [y=s-s*s^(x-0.5t)](https://www.desmos.com/calculator/uuxucmdaue)
+### [y=s-s*s^(0.5x-0.5t)](https://www.desmos.com/calculator/1qknrc1jrk)
 * y = throttle
 * x = time elapsed
 * t = duration of boost
 * s = speed (normally multiplied by 5, but actual value depends on configuration)
-
-This results in the following graph at 20km/h:
-
-![Graph 20km/h](Graph_Throttle_20kmh.png?raw=true "Graph 20km/h")
 
 # Modifications
 ## Hardware
