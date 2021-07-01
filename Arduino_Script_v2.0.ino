@@ -28,13 +28,10 @@
 //
 const int   DURATION_MIN       = 1000;  // Throttle duration at min throttle (in millisec)
 const int   DURATION_MAX       = 5000;  // Throttle duration at max throttle (in millisec)
-const float SENSITIVITY        = 1.5;   // Sensitivity for detecting new kicks (in km/h difference)
-const int   READINGS_COUNT     = 10;    // Amount of speed readings (more readings will make kick detection slower but more accurate)
-const int   THROTTLE_BOOST     = 1;     // Increase throttle during boost (improves acceleration)
 const int   THROTTLE_MIN_KMH   = 5;     // What speed to start throttling
 const int   THROTTLE_MAX_KMH   = 18;    // What speed to give max throttle (in km/h, we recommend vMax-5)
 const int   THROTTLE_IDLE_PCT  = 0;     // Maximum is 10 to disable KERS when not braking above THROTTLE_MIN_KMH on stock firmware
-const int   THROTTLE_MIN_PCT   = 30;     // Throttle minimum to set power at or below THROTTLE_MIN_KMH (71 for 350W motor, but we recommend adapting the firmware instead)
+const int   THROTTLE_MIN_PCT   = 30;    // Throttle minimum to set power at or below THROTTLE_MIN_KMH (71 for 350W motor, but we recommend adapting the firmware instead)
 const int   THROTTLE_MAX_PCT   = 100;   // Throttle maximum to set power at or below THROTTLE_MIN_KMH (71 for 350W motor, but we recommend adapting the firmware instead)
 const int   BRAKE_LIMIT        = 48;    // Limit for disabling throttle when pressing brake pedal (we recommend setting this as low as possible)
 const int   THROTTLE_PIN       = 10;    // Pin of programming board (9=D9 or 10=D10)
@@ -63,18 +60,14 @@ const int   THROTTLE_DIFF_PCT  = THROTTLE_MAX_PCT-THROTTLE_MIN_PCT;
 SoftwareSerial SoftSerial(SERIAL_PIN, 3); // RX, TX
 
 // Variables
-unsigned long startTime = 0;              // start time of last boost
-unsigned long stopTime = 0;               // end time of last boost
 bool isBraking = true;                    // brake activated
+unsigned long startBoost = 0;             // start time of last boost
+int speedIncreased = 0;                   // count of consequent speed increases, is reset by boost or decrease
 int speedCurrent = 0;                     // current speed
-int speedBoost = 0;                       // speed at start of boost
-float speedAverage = 0;                   // the average speed over last X readings
-float speedLastAverage = 0;               // the average speed over last X readings in the last loop
-int speedReadings[READINGS_COUNT] = {0};  // the readings from the speedometer
+int speedMedian = 0;                      // the median speed over last 5 readings
+int speedLastMedian = 0;                  // the previous median speed over last 5 readings
+int speedReadings[4] = {0};               // the last 4 readings from the speedometer
 int index = 0;                            // the index of the current reading
-int speedReadingsSum = 0;                 // the sum of all speed readings
-int speedReadingsStart = 0;               // the start of last reading block
-int speedReadingsInt = 1000;              // the duration of a readings block
 uint8_t state = READY;                    // current state
 
 uint8_t readBlocking() {
@@ -86,7 +79,6 @@ uint8_t readBlocking() {
 void setup() {
     Serial.begin(115200); SoftSerial.begin(115200); // Start reading SERIAL_PIN at 115200 baud
     TCCR1B = TCCR1B & 0b11111001; // TCCR1B = TIMER 1 (D9 and D10 on Nano) to 32 khz
-    speedReadingsStart = millis();
 }
 
 uint8_t buff[256];
@@ -123,25 +115,43 @@ void loop() {
     if(buff[1]==DASHB2MOTOR){
         if(buff[2]==BRAKEVALUE){
             isBraking = (buff[6]>=BRAKE_LIMIT);
-            if(isBraking)debug((String)"BRAKE: "+buff[6]+" ("+(isBraking?"yes":"no")+")",EVENT);
+            if(isBraking && DEBUG_MODE>=EVENT)Serial.println((String)"BRAKE: "+buff[6]+" ("+(isBraking?"yes":"no")+")");
         }
     } else if(buff[1]==MOTOR2DASHB){
         if(buff[2]==SPEEDVALUE){
             speedCurrent = buff[len];
-            speedReadingsSum = speedReadingsSum - speedReadings[index];
-            speedReadings[index] = speedCurrent;
-            speedReadingsSum = speedReadingsSum + speedCurrent;
-            index++;
-            if(index >= READINGS_COUNT){
-              index = 0;
-              speedReadingsInt = millis()-speedReadingsStart;
-              speedReadingsStart = millis();
-            }
-            speedAverage = speedReadingsSum / (float)READINGS_COUNT;
-            if(speedCurrent>0||speedAverage>0)debug((String)"SPEED: "+speedCurrent+" (Average: "+speedAverage+")",EVENT);
+            speedMedian=median5(speedReadings[0],speedReadings[1],speedReadings[2],speedReadings[3],speedCurrent);
+            speedReadings[index%4] = speedCurrent;
+            index = (index == 3?0:index+1);
+            if(state==READY)speedIncreased = (speedLastMedian>speedMedian?0:speedIncreased+(speedMedian-speedLastMedian));
         }
     }
     motion_control();
+}
+
+// Calculate median of 5 values by swapping them in a Bose-Nelson Algorithm (very light function!)
+int median5( int a0, int a1, int a2, int a3, int a4 ) {
+    swap(&a0, &a1); 
+    swap(&a3, &a4);
+    swap(&a2, &a4);
+    swap(&a2, &a3); 
+    swap(&a0, &a3);
+    swap(&a0, &a2);
+    swap(&a1, &a4);
+    swap(&a1, &a3);
+    swap(&a1, &a2);
+  
+    return a2;
+}
+
+// Swap values if first is bigger than second
+void swap(int *j,  int *k) {
+    double x = *j;
+    double y = *k;
+    if (*j > *k) {
+        *k = x;
+        *j = y;
+    }
 }
 
 float getThrottle(float pwr,float tme){
@@ -160,59 +170,52 @@ float getPower(int spd){ // in full pct
     return THROTTLE_MIN_PCT+(spd-THROTTLE_MIN_KMH)/(float)THROTTLE_DIFF_KMH*THROTTLE_DIFF_PCT;
 }
 
-bool debug(String text,int mode){
-    if(DEBUG_MODE>=mode){
-        Serial.println(text);
-    }
-    return false;
+int stopThrottle(bool braking){
+    setThrottleIdle(braking?0:THROTTLE_IDLE_PCT);
+    state = READY;
+    // Reset measurements to prevent false kick detection
+    speedIncreased=0;
+    speedReadings[0]=speedCurrent+2;speedReadings[1]=speedCurrent+2;speedReadings[2]=speedCurrent+2;speedReadings[3]=speedCurrent+2;
+    if(speedMedian>=THROTTLE_MIN_KMH && DEBUG_MODE>=EVENT)Serial.println((String)"READY");
 }
 
 void motion_control() {
-    if (speedCurrent < THROTTLE_MIN_KMH || isBraking) {
-        brakeThrottle();
-        stopTime = millis();
-        state = READY;
+    if (speedMedian < THROTTLE_MIN_KMH || isBraking) {
+        stopThrottle(true); // Stop throttling, regenerative braking
     } else {
         // Check if new boost needed
-        debug((String)"CHECK: "+(speedAverage-speedLastAverage)+">"+(SENSITIVITY/READINGS_COUNT)+" && "+(millis()-stopTime)+">"+(speedReadingsInt/2),EVENT);
-        if (state != BOOST && (speedAverage-speedLastAverage) > (SENSITIVITY/READINGS_COUNT) && (millis()-stopTime)>(speedReadingsInt/2)) { // If not boosting, kick detected and no false-positive reading
-            state = BOOST;
-            startTime = millis();
-            speedBoost = speedCurrent;
-            debug((String)"BOOST: "+startTime,EVENT);
-        } 
+        if(DEBUG_MODE>=EVENT)Serial.println(state==BOOST?(String)"BOOSTING...":(String)"CHECKING: "+(speedIncreased)+" > 1: "+(speedIncreased>1?"BOOST ACTIVATED!":"NO BOOST"));
+        if (speedIncreased > 1) { // If kick detected 
+            speedIncreased=0;
+            state = BOOST; // Activate boost
+            startBoost = millis();
+        }
         // Check for existing boost
         if (state == BOOST){
             // Calculate duration and throttle
-            float power = getPower(THROTTLE_BOOST==1?speedCurrent:speedBoost);
-            int timeElapsed = (millis()-startTime);
-            int timeDuration = getDuration(speedBoost);
-            float timeToGo = (timeElapsed-timeDuration)/(float)1000;
-            float throttlePercentage = getThrottle(power,timeToGo);
-            debug((String)"THROTTLE: "+throttlePercentage+"% ("+power+" @ "+-timeToGo+"s)",EVENT);
-            if((speedAverage-speedLastAverage)>0)stopTime = millis();
+            float power = getPower(speedCurrent);
+            int timeElapsed = (millis()-startBoost);
+            int timeDuration = getDuration(speedMedian);
+            float timeRemaining = (timeElapsed-timeDuration)/(float)1000;
+            float throttlePercentage = getThrottle(power,timeRemaining);
             if(throttlePercentage>10){ 
-                setThrottle(throttlePercentage);
+                setThrottlePercentage(throttlePercentage);
+                if(DEBUG_MODE>=EVENT)Serial.println((String)"THROTTLE: "+throttlePercentage+"% ("+power+" @ "+-timeRemaining+"s)");
             } else { // End of boost
-                debug((String)"READY: "+stopTime,EVENT);
-                state = READY;
+                stopThrottle(false); // Idle throttle, no regenerative braking
             }
         // No current boost, above 5kmh and not braking
         } else {
-            idleThrottle(); // Default throttle
+            stopThrottle(false); // Idle throttle, no regenerative braking
         }
     }
-    speedLastAverage = speedAverage;
+    speedLastMedian = speedMedian;
 }
 
-int brakeThrottle(){
-    analogWrite(THROTTLE_PIN, 45); // Percentage in whole numbers: 0-100, results in a value of 45-233
+int setThrottleIdle(int offset){
+    analogWrite(THROTTLE_PIN, 45+offset*1.88); // Percentage in whole numbers: 0-100, results in a value of 45-233
 }
 
-int idleThrottle(){
-    analogWrite(THROTTLE_PIN, 45+THROTTLE_IDLE_PCT*1.88); // Percentage in whole numbers: 0-100, results in a value of 45-233
-}
-
-int setThrottle(int percentageThrottle) {
+int setThrottlePercentage(float percentageThrottle) {
     analogWrite(THROTTLE_PIN, 45+THROTTLE_MIN_PCT*1.88+percentageThrottle*THROTTLE_DIFF_PCT/THROTTLE_MAX_PCT*1.88); // Percentage in whole numbers: 0-100, results in a value of 45-233
 }
