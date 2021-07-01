@@ -68,7 +68,7 @@ Follow steps 1-6 of the disassembly in reverse order. Make sure you mount the bo
 
 ## Software
 ### Upload script to Arduino
-Using the latest Arduino IDE, upload the .ino file to your programming board. 
+Using the latest Arduino IDE, upload the .ino file to your Arduino Nano programming board. 
 
 ### Flash custom firmware to Dashboard
 Using one of the following apps, flash your dashboard to custom firmware that meets the local regulations:
