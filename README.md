@@ -105,7 +105,7 @@ Sources:
 * [Artikel 35a Reglement verkeersregels en verkeerstekens 1990 (RVV 1990)](https://wetten.overheid.nl/jci1.3:c:BWBR0004825&hoofdstuk=II&paragraaf=13&artikel=35a)
 
 ## Insurance and/or liability
-Because this scooter does not need type approval, you do not need a compulsory third party liability insurance for vehicles. You are insured under the conditions of a Public Liability Insurance if damage is caused by your electric scooter. We recommend to get a Public Liability Insurance when using your scooter on puvlic roads. 
+Because this scooter does not need type approval and/or registration, you do not need a compulsory third party liability insurance for vehicles. You are insured under the conditions of a Public Liability Insurance if any damage is caused by your electric scooter to third parties. We recommend to get this insurance when driving on public roads.
 
 ## Confirmation of legality
 "(...) However, we take the view that a two-wheeled vehicle, which is propelled by muscle power and which clearly belongs on the bicycle path, should fall into the category of bicycle. (...) Due to the nature of the support, these scooters therefore also fall into the category of 'bicycle with pedal assistance' and do not have to be admitted separately as special mopeds. You are allowed to drive on public roads at a maximum speed of 25 km/h."
