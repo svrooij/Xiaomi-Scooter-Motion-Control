@@ -8,9 +8,6 @@ A small hardware and software modification to legalise electric scooters with Se
 - Xiaomi Mi (M365) Pro 2 (tested)
 - Segway-Ninebot Max and ES series (should theoretically work as wiring is identical, not tested!!!)
 
-# Known issues
-- Accelerating in corners: The wheel width on the tire wall is a lot smaller than the tire center. Because the speed is measured by the amound of wheel rotations, cornering with your scooter will result in an incorrect increasing speed reading. This is a design flaw of the scooter and cannot be solved in this script.
-
 # Disclaimer
 THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES ARE PROVIDED BY THE DEVELOPER ON AN "AS IS" AND "AS AVAILLABLE" BASIS, UNLESS OTHERWISE SPECIFIED IN WRITING. THE DEVELOPER DOES NOT MAKE ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES. YOU EXPRESSLY AGREE THAT YOUR USE OF THIS SCRIPT IS AT YOUR OWN RISK. 
 
@@ -65,6 +62,10 @@ Finish up wrapping the board in heat shrink tube and cover all remaining open co
 
 ### Reassembly
 Follow steps 1-6 of the disassembly in reverse order. Make sure you mount the board tightly in the steering frame to prevent it from rattling. Program the board and flash your scooter using the steps below.
+
+# Known issues
+- Accelerating in corners: The wheel width on the tire wall is smaller than the tire center. Because the scooter speed is measured by the amount of wheel rotations, cornering with your scooter will result in an incorrect (increasing) speed measurement. This is a design flaw of the scooter and cannot be solved in this script. It is recommended to hold the brake while cornering sharply to prevent these accelerations.
+- Accelerating on downhill slopes and after speed speed bumps. This is as expected as this will result in an increased speed measurement.
 
 ## Software
 ### Upload script to Arduino
