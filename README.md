@@ -64,8 +64,8 @@ Finish up wrapping the board in heat shrink tube and cover all remaining open co
 Follow steps 1-6 of the disassembly in reverse order. Make sure you mount the board tightly in the steering frame to prevent it from rattling. Program the board and flash your scooter using the steps below.
 
 # Known issues
-- Accelerating in corners: The wheel width on the tire wall is smaller than the tire center. Because the scooter speed is measured by the amount of wheel rotations, cornering with your scooter will result in an incorrect (increasing) speed measurement. This is a design flaw of the scooter and cannot be solved in this script. It is recommended to hold the brake while cornering sharply to prevent these accelerations.
-- Accelerating on downhill slopes and after speed speed bumps. This is as expected as this will result in an increased speed measurement.
+- __Accelerating in corners__: The wheel width on the tire wall is smaller than the tire center. Because the scooter speed is measured by the amount of wheel rotations, cornering with your scooter will result in an incorrect (increasing) speed measurement. This is a design flaw of the scooter and cannot be solved in this script. It is recommended to hold the brake while cornering sharply to prevent these accelerations.
+- __Accelerating on downhill slopes and after speed bumps__: This is as expected as this will result in an increased speed measurement.
 
 ## Software
 ### Upload script to Arduino
