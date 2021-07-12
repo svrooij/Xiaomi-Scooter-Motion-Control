@@ -77,7 +77,6 @@ SoftwareSerial SoftSerial(SERIAL_PIN, 3); // RX, TX
 bool isBraking = true;                    // brake activated
 unsigned long startBoost = 0;             // start time of last boost
 int boostCount = 0;                       // count of boosts after reaching THROTTLE_MIN_KMH
-int brakeCount = 0;                       // count of brake moments after reaching THROTTLE_MIN_KMH
 float speedIncrCount = 0;                 // count of consequent speed increases
 int speedRaw = 0;                         // current raw speed
 float speedValid = 0;                     // the validated speed (median+average over last 5 readings)
@@ -153,7 +152,6 @@ void loop() {
                     return;
                 }
                 if(buff[1]==ESC && buff[2]==BRAKE){
-                    if(isBraking&&(buff[6]<BRAKE_LIMIT))brakeCount+=1;
                     isBraking = (buff[6]>=BRAKE_LIMIT);
                     if(DEBUG_MODE>=EVENT)Serial.println((String)"BRAKE: "+buff[6]+" ("+(isBraking?"yes":"no")+")");
                 } else if (buff[1]==BLE && buff[2]==SPEED){
@@ -188,7 +186,6 @@ void loop() {
                     return;
                 }
                 if(buff[2]==ESC && buff[3]==BRAKE){
-                      if(isBraking&&(buff[6]<BRAKE_LIMIT))brakeCount+=1;
                       isBraking = (buff[7]>=BRAKE_LIMIT);
                       if(DEBUG_MODE>=EVENT)Serial.println((String)"BRAKE: "+buff[6]+" ("+(isBraking?"yes":"no")+")");
                 } else if (buff[2]==BLE && buff[3]==SPEED){
@@ -263,8 +260,7 @@ int getDuration(int count){
 
 float getPower(int spd){ // in full pct
     if(spd<=THROTTLE_MIN_KMH) return THROTTLE_MIN_PCT;
-    //if(spd>=THROTTLE_MAX_KMH) return THROTTLE_MAX_PCT;
-    if(spd>=THROTTLE_MAX_KMH) return (brakeCount>9?100:THROTTLE_MAX_PCT); // Easter is coming soon this year
+    if(spd>=THROTTLE_MAX_KMH) return THROTTLE_MAX_PCT;
     return THROTTLE_MIN_PCT+(spd-THROTTLE_MIN_KMH)/(float)THROTTLE_DIFF_KMH*THROTTLE_DIFF_PCT;
 }
 
@@ -277,7 +273,6 @@ int stopThrottle(bool braking){
 }
 
 void motion_control() {
-    if (speedRaw < THROTTLE_MIN_KMH && brakeCount<9)brakeCount=0;
     if (speedRaw < THROTTLE_MIN_KMH || isBraking) {
         boostCount = 0;
         stopThrottle(true); // Stop throttling, regenerative braking
