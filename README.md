@@ -71,15 +71,13 @@ Follow steps 1-6 of the disassembly in reverse order. Make sure you mount the bo
 ### Upload script to Arduino
 Using the latest Arduino IDE, upload the .ino file to your Arduino Nano programming board. 
 
-### Limit motor power to 250W (only required for >250W motors)
-
-#### Option 1: Flash custom firmware (option 1)
+### Limit speed, motor power (only required for >250W motors) and disable brake light flash
+#### Flash custom firmware
 Using one of the following apps, flash your dashboard to custom firmware that meets the local regulations:
 * Android (paid): [Xiaoflasher](https://play.google.com/store/apps/details?id=eScooter.m365Info)
 * Android (free): [ScooterHacking Utility](https://play.google.com/store/apps/details?id=sh.cfw.utility)
 * iOS (free, create firmware manually): [Scooter Companion](https://testflight.apple.com/join/RaFiBTgi) 
-Recommended script variables:
-* Set THROTTLE_MAX_PCT to 100
+
 Recommended firmware params:
 * Max speed: 25kmh/20kmh/15kmh (S/D/ECO, max 25 km/h for legal purposes)
 * Draw: 18A/16A/14A (S/D/ECO, with 350W motor use max 18A for legal purposes) (set )
@@ -87,12 +85,6 @@ Recommended firmware params:
 * Brake light flash frequency: 0 (no flashing for legal purposes)
 * No KERS (also called COAST MODE+ANTI CLONK, to disable braking at 0% throttle)
 * No overspeed alarm (theoretically possible at steep slopes)
-
-#### Option 2: Use stock firmware, set brake light always on
-Using one of the the apps above to set your brake light to 'always on' (no firmware flashing required).
-
-Recommended script variables:
-* Set THROTTLE_MAX_PCT to 71 (71% of 350W is 248,5W)
 
 ## Done!
 
