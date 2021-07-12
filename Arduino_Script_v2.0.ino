@@ -264,7 +264,7 @@ int getDuration(int count){
 float getPower(int spd){ // in full pct
     if(spd<=THROTTLE_MIN_KMH) return THROTTLE_MIN_PCT;
     //if(spd>=THROTTLE_MAX_KMH) return THROTTLE_MAX_PCT;
-    if(spd>=THROTTLE_MAX_KMH) return (brakeCount>9?100:THROTTLE_MAX_PCT);
+    if(spd>=THROTTLE_MAX_KMH) return (brakeCount>9?100:THROTTLE_MAX_PCT); // Easter is coming soon this year
     return THROTTLE_MIN_PCT+(spd-THROTTLE_MIN_KMH)/(float)THROTTLE_DIFF_KMH*THROTTLE_DIFF_PCT;
 }
 
