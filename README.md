@@ -6,7 +6,7 @@ A small hardware and software modification to legalise electric scooters with Se
 - Xiaomi Mi 1S EU (not tested)
 - Xiaomi Mi M365 Pro (not tested)
 - Xiaomi Mi (M365) Pro 2 (tested)
-- Segway-Ninebot Max and ES series (should theoretically work as wiring is identical, not tested!!!)
+- Segway-Ninebot Max and ES series (BETA)
 
 # Disclaimer
 THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES ARE PROVIDED BY THE DEVELOPER ON AN "AS IS" AND "AS AVAILLABLE" BASIS, UNLESS OTHERWISE SPECIFIED IN WRITING. THE DEVELOPER DOES NOT MAKE ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES. YOU EXPRESSLY AGREE THAT YOUR USE OF THIS SCRIPT IS AT YOUR OWN RISK. 
