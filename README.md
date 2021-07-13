@@ -2,11 +2,12 @@
 A small hardware and software modification to legalize electric  Segway-Ninebot ES/MAX/Xiaomi M365-series scooters in The Netherlands.
 
 # Models
-- Xiaomi Mi Essential (not tested)
-- Xiaomi Mi 1S EU (not tested)
-- Xiaomi Mi M365 Pro (not tested)
-- Xiaomi Mi (M365) Pro 2 (tested)
-- Segway-Ninebot Max and ES series (BETA)
+- Xiaomi Mi Essential
+- Xiaomi Mi 1S EU
+- Xiaomi Mi M365 Pro
+- Xiaomi Mi (M365) Pro 2
+- Segway-Ninebot Max
+- Segway-Ninebot ES
 
 # Disclaimer
 THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES ARE PROVIDED BY THE DEVELOPER ON AN "AS IS" AND "AS AVAILABLE" BASIS, UNLESS OTHERWISE SPECIFIED IN WRITING. THE DEVELOPER DOES NOT MAKE ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THIS SCRIPT, INSTRUCTIONS, INFORMATION AND OTHER SERVICES. YOU EXPRESSLY AGREE THAT YOUR USE OF THIS SCRIPT IS AT YOUR OWN RISK. 
@@ -87,6 +88,7 @@ Recommended firmware params:
 * No overspeed alarm (theoretically possible at steep slopes)
 
 ## Done!
+Change the LIMIT parameter to adapt the step sensitivity to your wishes. A lower LIMIT will result in faster step detection but also more false-positive step detections.
 
 ## Support
 We have a Telegram group for legal electric scooter enthusiasts, join us on:
