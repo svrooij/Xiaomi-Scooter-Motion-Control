@@ -273,8 +273,8 @@ int stopThrottle(bool braking){
 }
 
 void motion_control() {
+    if (speedRaw < THROTTLE_MIN_KMH)boostCount = 0;
     if (speedRaw < THROTTLE_MIN_KMH || isBraking) {
-        boostCount = 0;
         stopThrottle(true); // Stop throttling, regenerative braking
     } else {
         // Check if new boost needed
