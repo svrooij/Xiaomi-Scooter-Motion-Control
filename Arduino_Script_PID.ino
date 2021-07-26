@@ -36,23 +36,29 @@
 // ==========================================================================
 //
 // Debug mode
-const int   DEBUG_MODE         = NONE;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
+const int   DEBUG_MODE           = EVENT;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
 // Kick detection
-const float KICK_DETECT_LOW    = 2;   // What speed increase (speed above current speed) to detect as kick at or below 18 kmh
-const float KICK_DETECT_HIGH   = 1.5; // What speed increase (speed above current speed) to detect as kick above 18 kmh
-const int   KICK_DURATION[4]   = {2000,3000,4000,5000};  // Duration of boost {1st,2nd,3rd,4th,5th kick during boost and more} (boost is reset by braking or >5s no boost)
+const float KICK_DETECT_LOW      = 1.3;   // What speed increase (speed above current speed) to detect as kick at or below 18 kmh
+const float KICK_DETECT_HIGH     = 1; // What speed increase (speed above current speed) to detect as kick above 18 kmh
+const float KICK_DETECT_DIF      = KICK_DETECT_HIGH-KICK_DETECT_LOW; // Difference between high and low kick detection
+const int   KICK_DURATION        = 5000;  // Duration of boost {1st,2nd,3rd,4th,5th kick during boost and more} (boost is reset by braking or >5s no boost)
 // Speed controller (PID)
-const int   SPEED_READINGS     = 6;   // Amount of speed readings (increases steadiness but decreases reaction speed)
-const float SPEED_PROPORTION   = 20;   // Power of increase
-const float SPEED_INTEGRAL     = 5;   // Time to overcome steady state errors (difference between speed and target target)
-const float SPEED_DISTURBANCE  = 1.2; // Time to remove overshoot / oscillations
-const int   SPEED_INCREASE_LOW = 0;   // Speed increase beyond target at or below 18 kmh
-const int   SPEED_INCREASE_HIGH = 0;  // Speed increase beyond target above 18 kmh
+const int   SPEED_MIN            = 8;   // Speed to start throttling (lower than 8 increases chance of false boost during walking)
+const int   SPEED_MAX            = 25;  // Speed to stop throttling (lower than 8 increases chance of false boost during walking)
+const int   SPEED_DIF            = SPEED_MAX-SPEED_MIN;   // Speed to start throttling (lower than 8 increases chance of false boost during walking)
+const int   SPEED_READINGS       = 6;   // Amount of speed readings (increases steadiness but decreases reaction speed)
+const float SPEED_PROPORTION_MIN = 20;   // Power of increase at minimum speed
+const float SPEED_PROPORTION_MAX = 50;   // Power of increase at maximum speed
+const float SPEED_PROPORTION_DIF = SPEED_PROPORTION_MAX-SPEED_PROPORTION_MIN;   // Difference between min and max power of increase
+const float SPEED_INTEGRAL       = 5;   // Time to overcome steady state errors (difference between speed and target target)
+const float SPEED_DISTURBANCE    = 1.2; // Time to remove overshoot / oscillations
+const float SPEED_INCREASE_LOW   = 1;   // Speed increase beyond target at or below 18 kmh
+const float SPEED_INCREASE_HIGH  = 1;  // Speed increase beyond target above 18 kmh
 // Throttle and brake
-const int   THROTTLE_OFF_PCT   = 0;     // Percentage of throttle when rolling out, 0 with KERS disabled, 10 with KERS enabled
-const int   BRAKE_LIMIT        = 48;    // Limit for disabling throttle when pressing brake pedal (we recommend setting this as low as possible)
-const int   THROTTLE_PIN       = 10;    // Pin of programming board (9=D9 or 10=D10)
-const int   SERIAL_PIN         = 2;     // Pin of serial input (2=D2)
+const int   THROTTLE_OFF_PCT     = 0;     // Percentage of throttle when rolling out, 0 with KERS disabled, 10 with KERS enabled
+const int   BRAKE_LIMIT          = 48;    // Limit for disabling throttle when pressing brake pedal (we recommend setting this as low as possible)
+const int   THROTTLE_PIN         = 10;    // Pin of programming board (9=D9 or 10=D10)
+const int   SERIAL_PIN           = 2;     // Pin of serial input (2=D2)
 //
 // ==========================================================================
 // ============================= DISCLAIMER =================================
@@ -89,7 +95,7 @@ int destIndex = 1;
 int cmdIndex = 2;
 int lenOffset = 1;
 SoftwareSerial SoftSerial(SERIAL_PIN, 3); // RX, TX
-PID throttlePID(&speedCurrent, &throttleOut, &speedTarget,SPEED_PROPORTION,SPEED_INTEGRAL,SPEED_DISTURBANCE, DIRECT);
+PID throttlePID(&speedCurrent, &throttleOut, &speedTarget,SPEED_PROPORTION_MIN,SPEED_INTEGRAL,SPEED_DISTURBANCE, DIRECT);
 
 uint8_t readByte() {
     while (!SoftSerial.available())
@@ -163,9 +169,12 @@ void loop() {
                 // h1 h2 0 1  2  3  4 5 6  7  8 9 c1 c2
                 // 5A A5 5 21 20 65 0 4 29 29 0 0 FE FE
                 isBraking = (buff[len+lenOffset-2]>=BRAKE_LIMIT);if(DEBUG_MODE>=EVENT && isBraking)Serial.println((String)"BRAKE: "+buff[len+lenOffset-2]+" ("+(isBraking?"yes":"no")+")");
-                if(isBraking){              
+                if(isBraking){     
+                    throttlePID.SetMode(MANUAL);         
                     boostTime=-99999;
                     boostCount = 0;
+                    throttleOut = 45;
+                    speedTarget = 0;
                 }
             // Each speed reading
             } else if (buff[destIndex]==BLE && buff[2]==SPEED){
@@ -181,7 +190,9 @@ void loop() {
                 speedIndex = (speedIndex>=SPEED_READINGS?0:speedIndex+1);
                 // Detect boost
                 float diff = maxDifference(speedCurrent);
-                if(speedRaw>7 && diff>=(speedRaw<18?KICK_DETECT_LOW:KICK_DETECT_HIGH) && (diff+speedCurrent)>speedTarget){ // Detect kick
+                if(speedRaw>7 && diff>(KICK_DETECT_LOW+KICK_DETECT_DIF/SPEED_DIF*(speedRaw-SPEED_MIN)) && (diff+speedCurrent)>speedTarget){ // Detect kick
+                    // Reset PID
+                    throttlePID.SetMode(AUTOMATIC);
                     Serial.println((String)"BOOST");
                     boostTime = millis();
                     boostCount +=1;
@@ -189,14 +200,18 @@ void loop() {
                 if(millis()-boostTime<150){ // After kick, detect max kick speed
                     float m = maxReading();
                     m = m + (m<18?SPEED_INCREASE_LOW:SPEED_INCREASE_HIGH);
-                    speedTarget = (speedTarget<m?m:speedTarget);
+                    if(m>speedTarget){
+                        speedTarget = m;
+                        throttlePID.SetTunings(SPEED_PROPORTION_MIN+SPEED_PROPORTION_DIF/SPEED_DIF*(speedTarget-SPEED_MIN),SPEED_INTEGRAL,SPEED_DISTURBANCE);
+                    }
                 }
                 // Calculate duration
-                int arrLen = sizeof(KICK_DURATION)/sizeof(int)-1;
-                int duration = KICK_DURATION[((boostCount-1)>arrLen?arrLen:(boostCount-1))];
-                if((millis()-boostTime)>duration || speedRaw<8)speedTarget = 0; // Stop throttling if boost ended or speed < 8 kmh
-                if((millis()-boostTime)>(duration+5000))boostCount=0; // Reset boost count if last boost ended over 5s ago
-
+                if((millis()-boostTime)>KICK_DURATION || speedRaw<SPEED_MIN){
+                    throttlePID.SetMode(MANUAL);
+                    throttleOut = 45+THROTTLE_OFF_PCT*1.88;
+                    speedTarget = 0;
+                }
+                if((millis()-boostTime)>(KICK_DURATION+5000))boostCount=0; // Reset boost count if last boost ended over 5s ago
                 throttlePID.Compute(); // Calculate throttle with PID Controller
                 if(DEBUG_MODE>=EVENT && speedCurrent>0)Serial.println((String)"PID: "+speedCurrent+"("+speedRaw+") "+throttleOut+" "+speedTarget);
             }
