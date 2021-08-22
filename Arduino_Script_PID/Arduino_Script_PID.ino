@@ -36,7 +36,7 @@
 // ==========================================================================
 //
 // Debug mode
-const int   DEBUG_MODE           = EVENT;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
+const int   DEBUG_MODE           = ALL;  // Debug mode (NONE for no logging, EVENT for event logging, ALL for serial data logging)
 // Kick detection
 const float KICK_DETECT_LOW      = 1.3;   // What speed increase (speed above current speed) to detect as kick at or below 18 kmh
 const float KICK_DETECT_HIGH     = 1; // What speed increase (speed above current speed) to detect as kick above 18 kmh
@@ -158,7 +158,7 @@ void loop() {
             uint16_t checksum = (uint16_t) readByte() | ((uint16_t) readByte() << 8); // LAST 2 BYTES IS CHECKSUM
             if (checksum != (sum ^ 0xFFFF)){ // CHECK XOR OF SUM AGAINST CHECKSUM
                 if(DEBUG_MODE==ALL)Serial.println((String)"CHECKSUM: "+checksum+" == "+(sum ^ 0xFFFF)+" >> FAILED!");
-                return; // STOP ON INVALID CHECKSUM
+                //return; // STOP ON INVALID CHECKSUM
             }
             // When braking
             if(buff[destIndex]==ESC && buff[cmdIndex]==BRAKE){
